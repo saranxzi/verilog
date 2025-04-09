@@ -1,0 +1,29 @@
+module d_ff_beh(input D, input clk, output reg Q, output Qbar);
+  assign Qbar = ~Q;
+
+  always @(posedge clk) begin
+    Q <= D;
+  end
+endmodule
+
+module tb_d_ff_beh;
+  reg D, clk;
+  wire Q, Qbar;
+
+  d_ff_beh uut (.D(D), .clk(clk), .Q(Q), .Qbar(Qbar));
+
+  initial begin
+    clk = 0;
+    forever #5 clk = ~clk;
+  end
+
+  initial begin
+    D = 0; #10;
+    D = 1; #10;
+    D = 0; #10;
+    D = 1; #10;
+    D = 1; #10;
+    $stop;
+  end
+endmodule
+

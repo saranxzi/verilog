@@ -1,0 +1,50 @@
+module decoder3x8 (
+    input [2:0] A,
+    output [7:0] Y
+);
+
+wire nA, nB, nC;
+
+not (nA, A[0]);
+not (nB, A[1]);
+not (nC, A[2]);
+
+and (Y[0], nA, nB, nC);
+and (Y[1], A[0], nB, nC);
+and (Y[2], nA, A[1], nC);
+and (Y[3], A[0], A[1], nC);
+and (Y[4], nA, nB, A[2]);
+and (Y[5], A[0], nB, A[2]);
+and (Y[6], nA, A[1], A[2]);
+and (Y[7], A[0], A[1], A[2]);
+
+endmodule
+
+module decoder3x8_tb;
+
+reg [2:0] A;      
+wire [7:0] Y;     
+
+decoder3x8 uut (
+    .A(A),
+    .Y(Y)
+);
+
+initial begin
+    $display("A | Y");
+    $monitor("%b | %b", A, Y);
+
+    A = 3'b000; #10;
+    A = 3'b001; #10;
+    A = 3'b010; #10;
+    A = 3'b011; #10;
+    A = 3'b100; #10;
+    A = 3'b101; #10;
+    A = 3'b110; #10;
+    A = 3'b111; #10;
+
+    $finish;
+end
+
+endmodule
+

@@ -1,0 +1,31 @@
+module sipo_beh(input clk, input reset, input sin, output reg [3:0] pout);
+  always @(posedge clk or posedge reset) begin
+    if (reset)
+      pout <= 4'b0000;
+    else
+      pout <= {pout[2:0], sin};
+  end
+endmodule
+
+module tb_sipo_beh;
+  reg clk, reset, sin;
+  wire [3:0] pout;
+
+  sipo_beh uut (.clk(clk), .reset(reset), .sin(sin), .pout(pout));
+
+  initial begin
+    clk = 0;
+    forever #5 clk = ~clk;
+  end
+
+  initial begin
+    reset = 1; sin = 0; #10;
+    reset = 0; sin = 1; #10;
+    sin = 0; #10;
+    sin = 1; #10;
+    sin = 1; #10;
+    sin = 0; #10;
+    $stop;
+  end
+endmodule
+

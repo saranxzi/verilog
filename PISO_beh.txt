@@ -1,0 +1,38 @@
+module piso_beh(input clk, input reset, input load, input [3:0] pin, output sout);
+  reg [3:0] shift_reg;
+
+  assign sout = shift_reg[3];
+
+  always @(posedge clk or posedge reset) begin
+    if (reset)
+      shift_reg <= 4'b0000;
+    else if (load)
+      shift_reg <= pin;
+    else
+      shift_reg <= {shift_reg[2:0], 1'b0};
+  end
+endmodule
+
+module tb_piso_beh;
+  reg clk, reset, load;
+  reg [3:0] pin;
+  wire sout;
+
+  piso_beh uut (.clk(clk), .reset(reset), .load(load), .pin(pin), .sout(sout));
+
+  initial begin
+    clk = 0;
+    forever #5 clk = ~clk;
+  end
+
+  initial begin
+    reset = 1; load = 0; pin = 4'b0000; #10;
+    reset = 0; load = 1; pin = 4'b1101; #10;
+    load = 0; #10;
+    #40;
+    load = 1; pin = 4'b1010; #10;
+    load = 0; #40;
+    $stop;
+  end
+endmodule
+

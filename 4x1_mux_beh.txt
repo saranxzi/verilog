@@ -1,0 +1,29 @@
+module mux_4x1_beh(input [3:0] in, input [1:0] sel, output reg out);
+  always @ (in or sel) begin
+    case (sel)
+      2'b00: out = in[0];
+      2'b01: out = in[1];
+      2'b10: out = in[2];
+      2'b11: out = in[3];
+    endcase
+  end
+endmodule
+
+module tb_mux_4x1_beh;
+  reg [3:0] in;
+  reg [1:0] sel;
+  wire out;
+
+  mux_4x1_beh uut (.in(in), .sel(sel), .out(out));
+
+  initial begin
+    in = 4'b1010; sel = 2'b00; #10;
+    sel = 2'b01; #10;
+    sel = 2'b10; #10;
+    sel = 2'b11; #10;
+    in = 4'b1100; sel = 2'b00; #10;
+    sel = 2'b01; #10;
+    $stop;
+  end
+endmodule
+

@@ -1,0 +1,25 @@
+module mux_4x1_df(input [3:0] in, input [1:0] sel, output out);
+  assign out = (sel == 2'b00) ? in[0] :
+               (sel == 2'b01) ? in[1] :
+               (sel == 2'b10) ? in[2] :
+               in[3];
+endmodule
+
+module tb_mux_4x1_df;
+  reg [3:0] in;
+  reg [1:0] sel;
+  wire out;
+
+  mux_4x1_df uut (.in(in), .sel(sel), .out(out));
+
+  initial begin
+    in = 4'b0001; sel = 2'b00; #10;
+    sel = 2'b01; #10;
+    sel = 2'b10; #10;
+    sel = 2'b11; #10;
+    in = 4'b1010; sel = 2'b00; #10;
+    sel = 2'b01; #10;
+    $stop;
+  end
+endmodule
+

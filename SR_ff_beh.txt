@@ -1,0 +1,36 @@
+module sr_ff_beh(input S, input R, input clk, output reg Q, output Qbar);
+  assign Qbar = ~Q;
+
+  always @(posedge clk) begin
+    if (S == 0 && R == 0)
+      Q <= Q;
+    else if (S == 0 && R == 1)
+      Q <= 0;
+    else if (S == 1 && R == 0)
+      Q <= 1;
+    else
+      Q <= 1'bx;
+  end
+endmodule
+
+module tb_sr_ff_beh;
+  reg S, R, clk;
+  wire Q, Qbar;
+
+  sr_ff_beh uut (.S(S), .R(R), .clk(clk), .Q(Q), .Qbar(Qbar));
+
+  initial begin
+    clk = 0;
+    forever #5 clk = ~clk;
+  end
+
+  initial begin
+    S = 0; R = 0; #10;
+    S = 1; R = 0; #10;
+    S = 0; R = 1; #10;
+    S = 1; R = 1; #10;
+    S = 0; R = 0; #10;
+    $stop;
+  end
+endmodule
+
